@@ -1,0 +1,1 @@
+"""Colley Matrix F1 Ranking System"""
