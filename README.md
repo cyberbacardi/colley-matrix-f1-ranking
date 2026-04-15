@@ -43,10 +43,12 @@ Unlike simple win-loss percentages, it accounts for opponent quality, providing 
 
 ## 🎯 Key Features
 
-✅ Real-time F1 Data Integration (OpenF1 API)  
-✅ Gaussian Elimination with Partial Pivoting  
-✅ Complete Data Pipeline  
-✅ Interactive Jupyter Notebook  
+✅ NumPy-based Linear Algebra Solver  
+✅ Type Hints and Error Handling  
+✅ Comprehensive Logging  
+✅ Unit Tests with pytest  
+✅ Configurable Settings  
+✅ Modular Architecture  
 ✅ Production-Ready Code  
 
 ---
@@ -75,24 +77,63 @@ pip install -r requirements.txt
 
 ## 🚀 Quick Start
 
-```python
-from src import (
-    fetch_f1_season,
-    build_colley_matrix,
-    solve_colley_system,
-    plot_rankings
-)
+```bash
+# Run the main ranking script
+python run_colley.py
 
-# Fetch F1 2024 data
-races = fetch_f1_season(season=2024)
-
-# Build and solve
-C, b = build_colley_matrix(races)
-rankings = solve_colley_system(C, b)
-
-# Visualize
-plot_rankings(rankings)
+# Run tests
+python -m pytest tests/
 ```
+
+## 🧰 CLI Options
+
+```bash
+# Run the sample ranking script with custom weights and team filters
+python run_colley.py --season 2024 --teams Red Bull Mercedes \
+  --points-weight 0.6 --penalty-weight 1.2 --driver-weight 0.4 --reliability-weight 0.9
+
+# Run without charts
+python run_colley.py --no-plot --no-heatmap
+```
+
+Or programmatically:
+
+```python
+from src.colley_solver import solve_colley_system
+
+# Sample F1 team data
+wins = {
+    'Red Bull': 12,
+    'Mercedes': 10,
+    'Ferrari': 8,
+    'McLaren': 6
+}
+
+losses = {
+    'Red Bull': 2,
+    'Mercedes': 4,
+    'Ferrari': 6,
+    'McLaren': 8
+}
+
+# Compute rankings
+rankings = solve_colley_system(wins, losses)
+print(rankings)  # [0.4412, 0.3137, 0.1863, 0.0588] - normalized to sum to 1
+```
+
+---
+
+## 🔧 Recent Improvements
+
+- **NumPy Integration**: Replaced manual Gaussian elimination with `numpy.linalg.solve` for better performance and numerical stability
+- **Ranking Normalization**: Rankings are now normalized to sum to 1.0 for better interpretability
+- **Enhanced Output**: Display includes total matches played and verification that rankings sum to 1
+- **Type Hints**: Added comprehensive type annotations for better code maintainability
+- **Error Handling**: Implemented proper exception handling and validation
+- **Logging**: Added structured logging throughout the application
+- **Unit Tests**: Created pytest test suite for core functionality
+- **Configuration**: Added configurable settings via `src/config.py`
+- **Modular Design**: Improved code organization with proper separation of concerns
 
 ---
 
